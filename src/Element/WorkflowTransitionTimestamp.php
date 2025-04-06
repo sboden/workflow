@@ -42,24 +42,28 @@ class WorkflowTransitionTimestamp extends FormElement {
   public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
     $timestamp = \Drupal::time()->getRequestTime();
 
-    if (!$input) {
+    if (!$input || !is_array($input)) {
+      // If input is not an array, return current timestamp
+      return $timestamp;
+    }
+
+    if (!isset($input['scheduled'])) {
       // Massage, normalize value after pressing Form button.
       // $element is also updated via reference.
       return $timestamp;
     }
 
     // Fetch $timestamp from widget for scheduled transitions.
-    $scheduled = (bool) $input['scheduled'] ?? '0';
+    $scheduled = (bool) ($input['scheduled'] ?? FALSE);
     if ($scheduled) {
-      $schedule_values = $input['date_time'];
+      $schedule_values = $input['date_time'] ?? [];
       // Fetch the (scheduled) timestamp to change the state.
       // Override $timestamp.
       $scheduled_date_time = implode(' ', [
-        $schedule_values['workflow_scheduled_date'],
-        $schedule_values['workflow_scheduled_hour'],
-        // $schedule_values['workflow_scheduled_timezone'],
+        $schedule_values['workflow_scheduled_date'] ?? '',
+        $schedule_values['workflow_scheduled_hour'] ?? '',
       ]);
-      $timezone = $schedule_values['workflow_scheduled_timezone'];
+      $timezone = $schedule_values['workflow_scheduled_timezone'] ?? date_default_timezone_get();
       $old_timezone = date_default_timezone_get();
       date_default_timezone_set($timezone);
       $timestamp = strtotime($scheduled_date_time);

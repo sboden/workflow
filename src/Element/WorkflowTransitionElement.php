@@ -357,8 +357,12 @@ class WorkflowTransitionElement extends FormElement {
     // Note: when editing existing Transition, user may still change comments.
     $comment = $values['comment'][0]['value'] ?? '';
     // @todo Why is 'timestamp' empty at create Node - when is it unset?
-    $timestamp_values = $values['timestamp'][0]['value'] ?? ['scheduled' => false];
-    $is_scheduled = (bool) $timestamp_values['scheduled'];
+    $timestamp_values = [];
+    if (isset($values['timestamp'][0]['value']) && is_array($values['timestamp'][0]['value'])) {
+      $timestamp_values = $values['timestamp'][0]['value'];
+    }
+    $is_scheduled = (bool) ($timestamp_values['scheduled'] ?? FALSE);
+    
     $timestamp = WorkflowTransitionTimestamp::valueCallback($timestamp_values, $timestamp_values, $form_state);
 
     if (!isset($to_sid)) {
