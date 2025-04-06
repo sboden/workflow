@@ -1,0 +1,162 @@
+<?php
+
+/**
+ * @file
+ * Development tools for Workflow module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\user\UserInterface;
+use Drupal\workflow\Entity\WorkflowTransitionInterface;
+
+\Drupal::moduleHandler()->loadInclude('workflow', 'php', 'workflow.api');
+
+/* Hooks defined by workflow module. */
+
+/**
+ * Implements hook_workflow().
+ */
+function workflow_devel_workflow($op, WorkflowTransitionInterface $transition, UserInterface $user) {
+  workflow_debug(__FILE__, __FUNCTION__, __LINE__, $op, '');
+  return hook_workflow($op, $transition, $user);
+}
+
+/**
+ * Implements hook_workflow_comment_alter().
+ */
+function workflow_devel_workflow_comment_alter(&$comment, array &$context) {
+  workflow_debug(__FILE__, __FUNCTION__, __LINE__, $comment, '');
+  hook_workflow_comment_alter($comment, $context);
+}
+
+/**
+ * Implements hook_workflow_history_alter().
+ */
+function workflow_devel_workflow_history_alter(array &$context) {
+  workflow_debug(__FILE__, __FUNCTION__, __LINE__);
+  hook_workflow_history_alter($context);
+}
+
+/**
+ * Implements hook_workflow_operations().
+ */
+function workflow_devel_workflow_operations($op, EntityInterface $entity = NULL) {
+  workflow_debug(__FILE__, __FUNCTION__, __LINE__, $op, '');
+  return hook_workflow_operations($op, $entity);
+}
+
+/**
+ * Implements hook_workflow_permitted_state_transitions_alter().
+ */
+function workflow_devel_workflow_permitted_state_transitions_alter(array &$transitions, array $context) {
+  workflow_debug(__FILE__, __FUNCTION__, __LINE__);
+  hook_workflow_permitted_state_transitions_alter($transitions, $context);
+}
+
+/* Hooks defined by core Form API: Change the Workflow Transition Form. */
+
+/**
+ * Implements workflow_devel_field_widget_single_element_WIDGET_TYPE_form_alter() for 'workflow_default'.
+ *
+ * A hook for changing the 'workflow_default' widget.
+ * hook_field_widget_form_alter() is deprecated.
+ * hook_field_widget_complete_form_alter is added.
+ *
+ * @see https://www.drupal.org/node/3180429
+ * @see https://www.drupal.org/node/2940780
+ * @see https://api.drupal.org/api/drupal/core%21modules%21field%21field.api.php/function/hook_field_widget_complete_form_alter/9.3.x
+ */
+function workflow_devel_field_widget_single_element_workflow_default_form_alter(&$element, &$form_state, $context) {
+  hook_field_widget_single_element_workflow_default_form_alter($element, $form_state, $context);
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function workflow_devel_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (substr($form_id, 0, 8) == 'workflow') {
+    hook_form_alter($form, $form_state, $form_id);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for 'workflow_transition_form'.
+ */
+function workflow_devel_form_workflow_transition_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  workflow_debug(__FILE__, __FUNCTION__, __LINE__, $form_id, '');
+  hook_form_workflow_transition_form_alter($form, $form_state, $form_id);
+}
+
+/**
+ * Hooks defined by core: Change the operations column in an Entity list.
+ *
+ * @see EntityListBuilder::getOperations()
+ *
+ * @return array
+ */
+function workflow_devel_entity_operation($entities) {
+  workflow_debug(__FILE__, __FUNCTION__, __LINE__, '', '');
+  $operations = [];
+  return $operations;
+}
+
+/**
+ * {@inheritdoc}
+ */
+function workflow_devel_entity_operation_alter(array $operations, EntityInterface $entity) {
+  workflow_debug(__FILE__, __FUNCTION__, __LINE__, $entity->getEntityTypeId(), $entity->id());
+}
+
+/*
+ * Hooks defined by core: hook_entity_CRUD.
+ *
+ * @see hook_entity_create(), hook_entity_update(), etc.
+ * @see hook_ENTITY_TYPE_create(), hook_ENTITY_TYPE_update(), etc.
+ */
+
+/**
+ * Implements hook_entity_create().
+ */
+function workflow_devel_entity_create(EntityInterface $entity) {
+  // workflow_debug(__FILE__, __FUNCTION__, __LINE__, 'create', $entity->getEntityTypeId());
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function workflow_devel_entity_insert(EntityInterface $entity) {
+  workflow_debug(__FILE__, __FUNCTION__, __LINE__, 'insert', $entity->getEntityTypeId());
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function workflow_devel_entity_presave(EntityInterface $entity) {
+  workflow_debug(__FILE__, __FUNCTION__, __LINE__, 'presave', $entity->getEntityTypeId());
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function workflow_devel_entity_update(EntityInterface $entity) {
+  workflow_debug(__FILE__, __FUNCTION__, __LINE__, 'update', $entity->getEntityTypeId());
+}
+
+/**
+ * Implements hook_entity_predelete().
+ */
+function workflow_devel_entity_predelete(EntityInterface $entity) {
+  if (substr($entity->getEntityTypeId(), 0, 8) == 'workflow') {
+    workflow_debug(__FILE__, __FUNCTION__, __LINE__, 'predelete', $entity->getEntityTypeId());
+  }
+  hook_entity_predelete($entity);
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function workflow_devel_entity_delete(EntityInterface $entity) {
+  workflow_debug(__FILE__, __FUNCTION__, __LINE__, 'delete', $entity->getEntityTypeId());
+  hook_entity_delete($entity);
+}

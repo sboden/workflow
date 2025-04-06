@@ -1,0 +1,6 @@
+services:
+  workflow_devel_subscriber.default:
+    class: Drupal\workflow_devel\EventSubscriber\WorkflowDevelEventSubscriber
+    arguments: []
+    tags:
+      - { name: event_subscriber }
