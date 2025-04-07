@@ -34,6 +34,31 @@ define('WORKFLOW_CREATION_STATE_NAME', 'creation');
 define('WORKFLOW_ROLE_AUTHOR_NAME', 'Author');
 define('WORKFLOW_ROLE_AUTHOR_RID', 'workflow_author');
 
+/**
+ * Controls whether deprecation warnings are shown.
+ *
+ * @var bool
+ */
+define('WORKFLOW_SHOW_DEPRECATION_WARNINGS', TRUE);
+define('WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG', TRUE);
+
+/**
+ * Helper function to get backtrace information for deprecation messages.
+ *
+ * @param array $backtrace
+ *   Backtrace array from debug_backtrace().
+ *
+ * @return string
+ *   A formatted string containing the function, file and line information.
+ */
+function _workflow_backtrace(array $backtrace) {
+  $caller = $backtrace[1] ?? [];
+  $function = $caller['function'] ?? 'unknown';
+  $file = $caller['file'] ?? 'unknown';
+  $line = $caller['line'] ?? 'unknown';
+  return "Called from: {$function}() in {$file} on line {$line}.";
+}
+
 \Drupal::moduleHandler()->loadInclude('workflow', 'inc', 'workflow.devel');
 \Drupal::moduleHandler()->loadInclude('workflow', 'inc', 'workflow.entity');
 \Drupal::moduleHandler()->loadInclude('workflow', 'inc', 'workflow.field');
@@ -232,6 +257,15 @@ function workflow_get_user_role_names($permission = NULL) {
  * @todo Follow Options pattern.
  */
 function workflow_get_workflow_state_names($wid = '', $grouped = FALSE) {
+  if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+    $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+    $message = 'The function workflow_get_workflow_state_names() is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+    @trigger_error($message, E_USER_DEPRECATED);
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+      \Drupal::logger('workflow_deprecation')->warning($message);
+    }
+  }
+
   $options = [];
 
   // Get the (user-dependent) options.

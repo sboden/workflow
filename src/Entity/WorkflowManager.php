@@ -84,8 +84,19 @@ class WorkflowManager implements WorkflowManagerInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @deprecated in workflow:1.8 and is removed from workflow:1.9.
    */
   public static function executeScheduledTransitionsBetween($start = 0, $end = 0) {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::executeScheduledTransitionsBetween() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+
     $clear_cache = FALSE;
 
     // If the time now is greater than the time to execute a transition, do it.
@@ -136,8 +147,18 @@ class WorkflowManager implements WorkflowManagerInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @deprecated in workflow:1.8 and is removed from workflow:1.9.
    */
   public static function executeTransitionsOfEntity(EntityInterface $entity) {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::executeTransitionsOfEntity() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
 
     // Avoid this hook on workflow objects.
     if (WorkflowManager::isWorkflowEntityType($entity->getEntityTypeId())) {
@@ -220,13 +241,23 @@ class WorkflowManager implements WorkflowManagerInterface {
     if ($field_names) {
       $entity->getCacheTagsToInvalidate();
     }
-
   }
 
   /**
    * {@inheritdoc}
+   *
+   * @deprecated in workflow:1.8 and is removed from workflow:1.9.
    */
   public static function deleteTransitionsOfEntity(EntityInterface $entity, $transition_type, $field_name, $langcode = '') {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::deleteTransitionsOfEntity() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+
     $entity_type_id = $entity->getEntityTypeId();
     $entity_id = $entity->id();
 
@@ -257,8 +288,19 @@ class WorkflowManager implements WorkflowManagerInterface {
    *
    * @return string
    *   The ID of the creation State for the Workflow of the field.
+   *
+   * @deprecated in workflow:1.8 and is removed from workflow:1.9.
    */
   private static function getCreationStateId(EntityInterface $entity, $field_name) {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::getCreationStateId() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+
     $sid = '';
 
     /** @var \Drupal\Core\Config\Entity\ConfigEntityBase $entity */
@@ -280,8 +322,20 @@ class WorkflowManager implements WorkflowManagerInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @deprecated in workflow:1.8 and is removed from workflow:1.9. Use
+   *   workflow_node_current_state() instead.
    */
   public static function getCurrentStateId(EntityInterface $entity, $field_name = '') {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::getCurrentStateId() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. Use function workflow_node_current_state() instead (which uses the same parameters). ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+
     $sid = '';
 
     if (!$entity) {
@@ -313,8 +367,20 @@ class WorkflowManager implements WorkflowManagerInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @deprecated in workflow:1.8 and is removed from workflow:1.9. Use
+   *   workflow_node_previous_state() instead.
    */
   public static function getPreviousStateId(EntityInterface $entity, $field_name = '') {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::getPreviousStateId() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. Use function workflow_node_previous_state() instead (which uses the same parameters). ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+
     $sid = '';
 
     if (!$entity) {
@@ -358,8 +424,19 @@ class WorkflowManager implements WorkflowManagerInterface {
    * Implements hook_entity_delete().
    *
    * Delete the corresponding workflow table records.
+   *
+   * @deprecated in workflow:1.8 and is removed from workflow:1.9.
    */
   public static function entityDelete(EntityInterface $entity) {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::entityDelete() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+
     // @todo Test with multiple workflows.
     switch (TRUE) {
       case $entity::class == 'Drupal\field\Entity\FieldConfig':
@@ -398,15 +475,36 @@ class WorkflowManager implements WorkflowManagerInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @deprecated in workflow:1.8 and is removed from workflow:1.9.
    */
   public static function deleteUser(AccountInterface $account) {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::deleteUser() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+
     self::cancelUser([], $account, 'user_cancel_delete');
   }
 
   /**
    * {@inheritdoc}
+   *
+   * @deprecated in workflow:1.8 and is removed from workflow:1.9.
    */
   public static function cancelUser($edit, AccountInterface $account, $method) {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::cancelUser() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
 
     switch ($method) {
       case 'user_cancel_block':
@@ -447,6 +545,8 @@ class WorkflowManager implements WorkflowManagerInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * This one is not deprecated.
    */
   public function getFieldMap($entity_type_id = '') {
     if ($entity_type_id) {
@@ -465,8 +565,19 @@ class WorkflowManager implements WorkflowManagerInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @deprecated in workflow:1.8 and is removed from workflow:1.9.
    */
   public static function isOwner(AccountInterface $account, EntityInterface $entity = NULL) {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::isOwner() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+
     $is_owner = FALSE;
 
     $entity_id = ($entity) ? $entity->id() : '';
@@ -495,8 +606,19 @@ class WorkflowManager implements WorkflowManagerInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @deprecated in workflow:1.8 and is removed from workflow:1.9.
    */
   public static function isWorkflowEntityType($entity_type_id) {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::isWorkflowEntityType() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+
     return in_array($entity_type_id, [
       'workflow_type',
       'workflow_state',
@@ -504,6 +626,111 @@ class WorkflowManager implements WorkflowManagerInterface {
       'workflow_transition',
       'workflow_scheduled_transition',
     ]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowStateNames($wid = '', $grouped = FALSE) {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::getWorkflowStateNames() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+    return workflow_get_workflow_state_names($wid, $grouped);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowNames($required = TRUE) {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::getWorkflowNames() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+    return workflow_get_workflow_names($required);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowFieldNames(EntityInterface $entity = NULL, $entity_type = '', $entity_bundle = '', $field_name = '') {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::getWorkflowFieldNames() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+    return workflow_get_workflow_field_names($entity, $entity_type, $entity_bundle, $field_name);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowFieldName(EntityInterface $entity, $field_name = '') {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::getWorkflowFieldName() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+    return workflow_get_field_name($entity, $field_name);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowsByType($entity_bundle, $entity_type) {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::getWorkflowsByType() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+    return workflow_get_workflows_by_type($entity_bundle, $entity_type);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowFieldsByEntityType($entity_type_id = '') {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::getWorkflowFieldsByEntityType() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+    return workflow_get_workflow_fields_by_entity_type($entity_type_id);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowStateNamesByEntityType($entity_type_id = '') {
+    if (WORKFLOW_SHOW_DEPRECATION_WARNINGS) {
+      $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+      $message = 'The WorkflowManager::getWorkflowStateNamesByEntityType() method is deprecated in workflow:1.8 and will be removed from workflow:1.9. ' . _workflow_backtrace($backtrace);
+      @trigger_error($message, E_USER_DEPRECATED);
+      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+        \Drupal::logger('workflow_deprecation')->warning($message);
+      }
+    }
+    return $this->getWorkflowStateNames();
   }
 
 }
