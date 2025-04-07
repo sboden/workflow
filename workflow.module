@@ -52,11 +52,41 @@ define('WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG', TRUE);
  *   A formatted string containing the function, file and line information.
  */
 function _workflow_backtrace(array $backtrace) {
-  $caller = $backtrace[1] ?? [];
+  $caller = $backtrace[0] ?? [];
   $function = $caller['function'] ?? 'unknown';
   $file = $caller['file'] ?? 'unknown';
   $line = $caller['line'] ?? 'unknown';
   return "Called from: {$function}() in {$file} on line {$line}.";
+}
+
+/**
+ * Helper function that determines whether the originating call is from
+ * workflow itself.
+ *
+ * @param array $backtrace
+ *   Backtrace array from debug_backtrace().
+ *
+ * @return bool
+ *   TRUE when the call is from workflow
+ *   FALSE when the call is not from workflow, or it's unknown.
+ */
+function _workflow_is_internal_call(array $backtrace) {
+  $known_workflow_functions = [ 'workflow_entity_delete',
+	                        'workflow_user_delete',
+				'workflow_node_current_state',
+				'workflow_access_node_access_records',
+				'viewElements',
+				'access',
+  ];
+
+  $caller = $backtrace[0] ?? [];
+  $file = $caller['file'] ?? 'unknown';
+  $function = $caller['function'] ?? 'unknown';
+  if ((mb_strpos($file, '/contrib/workflow') !== false) ||
+      in_array($function, $known_workflow_functions)) {
+    return TRUE;
+  }
+  return FALSE;
 }
 
 \Drupal::moduleHandler()->loadInclude('workflow', 'inc', 'workflow.devel');

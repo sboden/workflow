@@ -168,13 +168,15 @@ class WorkflowTransition extends ContentEntityBase implements WorkflowTransition
     // Add deprecation warning if 'wid' is not present in the input array.
     if (WORKFLOW_SHOW_DEPRECATION_WARNINGS && !isset($values['wid'])) {
       $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
-      if (is_string($state)) {
-        $state_state = WorkflowState::load($state);
-      }
-      $message = 'The "wid" key should be used in the array input for WorkflowTransition::create(). This will be required in drupal/workflow:1.9. ' . _workflow_backtrace($backtrace) . ' The value "wid" in this instance would be "' . ($state_state ? $state_state->getWorkflowId() : '') . '".';
-      @trigger_error($message, E_USER_DEPRECATED);
-      if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
-        \Drupal::logger('workflow_deprecation')->warning($message);
+      if (!_workflow_is_internal_call($backtrace)) {
+        if (is_string($state)) {
+          $state_state = WorkflowState::load($state);
+        }
+        $message = 'The "wid" key should be used in the array input for WorkflowTransition::create(). This will be required in drupal/workflow:1.9. ' . _workflow_backtrace($backtrace) . ' The value "wid" in this instance would be "' . ($state_state ? $state_state->getWorkflowId() : '') . '".';
+        @trigger_error($message, E_USER_DEPRECATED);
+        if (WORKFLOW_SHOW_DEPRECATION_WARNINGS_IN_WATCHDOG) {
+          \Drupal::logger('workflow_deprecation')->warning($message);
+        }
       }
     }
 
